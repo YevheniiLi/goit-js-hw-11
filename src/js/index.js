@@ -71,6 +71,7 @@ async function onFormSubmit(evt) {
         `Hooray! We found ${totalHits} images.`);
     renderGalleryMarkup(hits);
     lightbox.refresh();
+    onInfiniteScroll();
 }    catch(error) {
      console.log(error);
 }
@@ -96,7 +97,7 @@ async function onClickLoad() {
 } catch(error) {
         console.log(error);
     }
-}
+};
 
 function clearInput() {
     galleryItems.innerHTML = '';   
@@ -106,3 +107,26 @@ const lightbox = new SimpleLightbox('.gallery a', {
      captionsData: 'alt',
      captionDelay: 300,
  });
+
+
+
+function onInfiniteScroll() {
+
+const options = {
+  rootMargin: '200px',
+  threshold: 1.0, 
+};
+
+
+ const observer = new IntersectionObserver(entries => {
+   entries.forEach(entry => {
+    if(entry.isIntersecting) {
+   onClickLoad();
+    }
+  });
+}, options);
+
+
+ observer.observe(document.querySelector('.scroll-guard'));
+}
+

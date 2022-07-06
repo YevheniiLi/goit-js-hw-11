@@ -7,6 +7,7 @@
     <title>Homework 11</title>
   </head>
   <body>
+
     <form class="search-form" id="search-form">
       <input
         type="text"
@@ -17,8 +18,11 @@
       <button type="submit">Search</button>
     </form>
 
-    <div class="gallery"></div>
-    <button type="button" class="load-more">Load more</button>
+    <div class="gallery">
+      <ul class ="gallery-items"></ul>
+    </div>
+    <button type="button" hidden class="load-more">Load more</button>
+    <div class="scroll-guard"></div>
     <script src="./js/index.js" type="module"></script>
   </body>
 </html>
