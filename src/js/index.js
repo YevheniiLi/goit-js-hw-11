@@ -66,12 +66,15 @@ function renderGalleryMarkup(searchImages) {
 
 async function onFormSubmit(evt) {
     evt.preventDefault();
-    clearInput();
-    getApiPixabay.resetPage();
+
     const reqmessage = evt.target.elements.searchQuery.value.trim();
         if(!reqmessage) 
             return Notify.info('Input some text to search')
         
+            clearInput();
+            getApiPixabay.resetPage();
+            
+
 
     getApiPixabay.searchQueryItem = reqmessage;
         try {  
