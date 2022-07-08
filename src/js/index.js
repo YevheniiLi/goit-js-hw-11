@@ -91,7 +91,14 @@ async function onFormSubmit(evt) {
     );
 
         }
-    
+ 
+        // if (galleryItems >= totalHits) {
+          
+        //     return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        // }
+      
+
+
     
     Notify.success (
         `Hooray! We found ${totalHits} images.`);
@@ -120,23 +127,20 @@ async function onClickLoad() {
     top: cardHeight * 0,
     behavior: "smooth",
   });
+  }catch (err) {
+    console.log(err.message);
+    if (err.message === 'Request failed with status code 400') {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+      }
+  };
 
-
-  const total = document.querySelectorAll('.photo-card').length;
-  
-  if (total >= totalHits) {
-    
-      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-  }
 
     lightbox.refresh();
 
 
 
-} catch(error) {
-        
-    }
-};
+} 
+
 
 function clearInput() {
     galleryItems.innerHTML = '';   
