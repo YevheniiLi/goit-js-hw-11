@@ -134,7 +134,6 @@ async function onClickLoad() {
 
 
 } catch(error) {
-        console.log(error);
         
     }
 };
