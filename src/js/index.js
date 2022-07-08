@@ -91,11 +91,7 @@ async function onFormSubmit(evt) {
     );
 
         }
- 
-        // if (galleryItems >= totalHits) {
-          
-        //     return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-        // }
+      
       
 
 
@@ -117,7 +113,17 @@ async function onFormSubmit(evt) {
 async function onClickLoad() {
     try {
     const { hits, totalHits } = await getApiPixabay.fetchImages();
+   
+    if (galleryItems.childElementCount >= totalHits) {
+    return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    }
+
+
     renderGalleryMarkup(hits);
+    lightbox.refresh();
+
+
+
 
     const { height: cardHeight } = document
     .querySelector(".gallery")
@@ -133,8 +139,7 @@ async function onClickLoad() {
       Notify.info("We're sorry, but you've reached the end of search results.");
       }
   };
-
-
+ 
     lightbox.refresh();
 
 
