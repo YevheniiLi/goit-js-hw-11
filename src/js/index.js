@@ -1,5 +1,5 @@
 import './../css/styles.css';
-import  { Notify } from 'notiflix';
+import  Notiflix, { Notify } from 'notiflix';
 import {GetApiPixabay} from './pixabay'; 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
@@ -7,7 +7,9 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const galleryItems = document.querySelector('.gallery');
 const searchForm = document.querySelector('.search-form');
-const loadButton = document.querySelector('.load-more')
+const loadButton = document.querySelector('.load-more');
+
+
 
 searchForm.addEventListener('submit', onFormSubmit);
 loadButton.addEventListener('click', onClickLoad);
@@ -67,51 +69,73 @@ function renderGalleryMarkup(searchImages) {
 async function onFormSubmit(evt) {
     evt.preventDefault();
 
-    const reqmessage = evt.target.elements.searchQuery.value.trim();
-        if(!reqmessage) 
-            return Notify.info('Input some text to search')
-        
+   
+    const request = evt.target.elements.searchQuery.value.trim();
+        if(!request)
+          
+            return Notify.info('Input some text to search');
             clearInput();
             getApiPixabay.resetPage();
+            evt.target.reset();
             
+          
 
-
-    getApiPixabay.searchQueryItem = reqmessage;
-        try {  
+    getApiPixabay.searchQueryItem = request;
+        try {    
     const {hits, totalHits} = await getApiPixabay.fetchImages();
-    if(!totalHits)
-        return Notify.warning(
+
+    if(!totalHits) {
+        
+       return Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
     );
+
+        }
+    
+    
     Notify.success (
         `Hooray! We found ${totalHits} images.`);
     renderGalleryMarkup(hits);
     lightbox.refresh();
     onInfiniteScroll();
+    
 }    catch(error) {
-     console.log(error);
+     console.log(error)}
+    
+
+    
 }
-    evt.target.reset();
-}
+
 
 async function onClickLoad() {
     try {
     const { hits, totalHits } = await getApiPixabay.fetchImages();
     renderGalleryMarkup(hits);
-    lightbox.refresh();
 
     const { height: cardHeight } = document
     .querySelector(".gallery")
     .firstElementChild.getBoundingClientRect();
   
   window.scrollBy({
-    top: cardHeight * 2,
+    top: cardHeight * 0,
     behavior: "smooth",
   });
 
 
+  const total = document.querySelectorAll('.photo-card').length;
+  
+  if (total >= totalHits) {
+    
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+  }
+
+    lightbox.refresh();
+
+
+
 } catch(error) {
         console.log(error);
+        
     }
 };
 
@@ -129,20 +153,32 @@ const lightbox = new SimpleLightbox('.gallery a', {
 function onInfiniteScroll() {
 
 const options = {
-  rootMargin: '200px',
+  
   threshold: 1.0, 
+  rootMargin: '200px',
 };
 
 
  const observer = new IntersectionObserver(entries => {
    entries.forEach(entry => {
     if(entry.isIntersecting) {
-   onClickLoad();
+    onClickLoad();
     }
   });
 }, options);
 
 
  observer.observe(document.querySelector('.scroll-guard'));
+
+ 
 }
+
+
+Notify.init({
+  position:'from-right',
+  timeout: 2000,
+  cssAnimationStyle: 'from-right',
+  showOnlyTheLastOne: true,
+})
+
 
